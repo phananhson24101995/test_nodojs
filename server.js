@@ -1,22 +1,14 @@
-const express = require('express');
+const express = require("express");
+const home = require("./routes/home");
+const getapi = require("./routes/api");
+
+// Middlewares
 const app = express();
-const fs = require('fs');
+app.use(express.json());
 
-// Đọc tệp JSON
-const data = JSON.parse(fs.readFileSync('./data/dataTongTheNhaMay.json', 'utf8'));
-
-// Tạo một API endpoint để truy vấn dữ liệu
-app.post('/api/dataTongTheNhaMay', (req, res) => {
-  const { datetime } = req.query;
-  console.log('timeQuery', datetime);
-  const filteredData = data.filter(item => {
-    const time = new Date(item.Time);
-    const timeQuery = new Date(datetime);
-    return time.getTime() === timeQuery.getTime();
-  });
-
-  res.json(filteredData);
-});
+// Routes
+app.use("/home", home);
+app.use("/api", getapi)
 
 // Khởi chạy server
 const port = process.env.PORT || 3200; // Chọn một cổng mà bạn muốn sử dụng
